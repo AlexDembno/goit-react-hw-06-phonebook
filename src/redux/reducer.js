@@ -1,24 +1,32 @@
-import { ADD_CONTACT, DELETE_CONTACT, FILTER_CONTACT } from './types';
+import { createReducer } from '@reduxjs/toolkit';
+import { combineReducers } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-const initialState = {
-  contacts: [],
-  filter: '',
+import { addContact, deleteContact, filterContact } from './actions';
+
+export const contactReducer = createReducer([], {
+  [addContact]: (store, { payload }) => {
+    store.push(payload);
+  },
+  [deleteContact]: (store, { payload }) =>
+    store.filter(el => el.id !== payload),
+});
+
+export const filterReducer = createReducer('', {
+  [filterContact]: (_, { payload }) => payload,
+});
+
+export const rootReducer = combineReducers({
+  contacts: contactReducer,
+  filter: filterReducer,
+});
+
+const persistConfig = {
+  key: 'root',
+  storage,
 };
 
-export const reducer = (store = initialState, action) => {
-  switch (action.type) {
-    case ADD_CONTACT:
-      const newContacts = [...store.contacts, action.payload];
-      return { ...store, contacts: newContacts };
-    case DELETE_CONTACT:
-      const removeContact = store.contacts.filter(
-        el => el.id !== action.payload
-      );
-      return { ...store, contacts: removeContact };
-    case FILTER_CONTACT:
-      return { ...store, filter: action.payload };
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-    default:
-      return store;
-  }
-};
+export default persistedReducer;

@@ -1,27 +1,12 @@
-import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact, deleteContact, filterContact } from 'redux/actions';
-// import contacts from 'data/contacts';
 import FormAddContacts from 'components/FormAddContacts/FormAddContacts';
 import FilterContacts from 'components/FilterContacts/FilterContacts';
 import Contacts from 'components/Contacts/Contacts';
 import style from './PhoneBook.module.css';
-import { store } from 'redux/store';
-
-const useLocalStorage = (key, defaultValue) => {
-  const [state, setState] = useState(() => {
-    return JSON.parse(window.localStorage.getItem(key)) ?? defaultValue;
-  });
-  useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(state));
-  }, [key, state]);
-  return [state, setState];
-};
 
 function PhoneBook() {
   const contacts = useSelector(store => store.contacts);
-  // const [contacts, setContacts] = useLocalStorage('my-contacts', []);
-  // const [filter, setFilter] = useState('');
   const filter = useSelector(store => store.filter);
 
   const dispatch = useDispatch();
