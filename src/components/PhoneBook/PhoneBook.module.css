@@ -13,8 +13,6 @@
   margin-bottom: 10px;
 }
 
-
-
 .text {
   composes: title;
   font-size: 25px;
