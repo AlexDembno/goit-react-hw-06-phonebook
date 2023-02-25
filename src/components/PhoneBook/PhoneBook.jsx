@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { addBook } from 'redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, deleteContact, filterContact } from 'redux/actions';
 // import contacts from 'data/contacts';
 import FormAddContacts from 'components/FormAddContacts/FormAddContacts';
 import FilterContacts from 'components/FilterContacts/FilterContacts';
 import Contacts from 'components/Contacts/Contacts';
 import style from './PhoneBook.module.css';
-import { nanoid } from 'nanoid';
+import { store } from 'redux/store';
 
 const useLocalStorage = (key, defaultValue) => {
   const [state, setState] = useState(() => {
@@ -19,11 +19,12 @@ const useLocalStorage = (key, defaultValue) => {
 };
 
 function PhoneBook() {
-  const [contacts, setContacts] = useLocalStorage('my-contacts', []);
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(store => store.contacts);
+  // const [contacts, setContacts] = useLocalStorage('my-contacts', []);
+  // const [filter, setFilter] = useState('');
+  const filter = useSelector(store => store.filter);
 
   const dispatch = useDispatch();
-  const books = useSelector(store => store.books);
 
   const findDublicate = name => {
     const result = contacts.find(
@@ -36,12 +37,13 @@ function PhoneBook() {
     if (findDublicate(name, number)) {
       return alert(`${name} is already in contacts`);
     }
-    const action = addBook({ name, number });
+    const action = addContact({ name, number });
     dispatch(action);
   };
 
   const handleChangeFilter = e => {
-    setFilter(e.currentTarget.value);
+    const action = filterContact(e.currentTarget.value);
+    dispatch(action);
   };
 
   const findName = () => {
@@ -55,9 +57,8 @@ function PhoneBook() {
   };
 
   const deleteNumber = contactId => {
-    setContacts(prevState =>
-      prevState.filter(contacts => contacts.id !== contactId)
-    );
+    const action = deleteContact(contactId);
+    dispatch(action);
   };
 
   return (

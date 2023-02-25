@@ -1,12 +1,26 @@
 import { nanoid } from 'nanoid';
-import { ADD_BOOK } from './types';
+import { ADD_CONTACT, DELETE_CONTACT, FILTER_CONTACT } from './types';
 
-export const addBook = payload => {
+export const addContact = payload => {
   return {
-    type: ADD_BOOK,
+    type: ADD_CONTACT,
     payload: {
       id: nanoid(),
       ...payload,
     },
+  };
+};
+
+export const deleteContact = payload => {
+  return {
+    type: DELETE_CONTACT,
+    payload,
+  };
+};
+
+export const filterContact = payload => {
+  return {
+    type: FILTER_CONTACT,
+    payload,
   };
 };

@@ -1,1 +1,1 @@
-export const getPhone = store => store.books;
+export const getContact = store => store.contacts;
