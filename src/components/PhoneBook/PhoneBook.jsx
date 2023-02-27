@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, deleteContact } from 'redux/contacts-slice';
-import { filterContact } from 'redux/filter-slise';
+import { addContact, deleteContact } from 'redux/contactsSlice/contacts-slice';
+import { filterContact } from 'redux/filterSlise/filter-slise';
 import FormAddContacts from 'components/FormAddContacts/FormAddContacts';
 import FilterContacts from 'components/FilterContacts/FilterContacts';
 import Contacts from 'components/Contacts/Contacts';

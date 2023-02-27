@@ -25,4 +25,11 @@ export default Contacts;
 
 Contacts.propTypes = {
   onClick: PropTypes.func.isRequired,
+  filterName: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    })
+  ),
 };
