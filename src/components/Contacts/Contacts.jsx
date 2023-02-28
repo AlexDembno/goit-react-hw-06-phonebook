@@ -1,9 +1,32 @@
 import ContactElement from 'components/ContactElement/ContactElement';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from 'redux/contactsSlice/contacts-slice';
 
 import style from './Contacts.module.css';
 
-function Contacts({ filterName, onClick }) {
+function Contacts() {
+  const contacts = useSelector(store => store.contacts);
+  const filter = useSelector(store => store.filter);
+
+  const dispatch = useDispatch();
+
+  const findName = () => {
+    if (!filter) {
+      return contacts;
+    }
+    const result = contacts.filter(contacts =>
+      contacts.name.toLowerCase().includes(filter.toLowerCase())
+    );
+    return result;
+  };
+
+  const filterName = findName();
+
+  const deleteNumber = contactId => {
+    const action = deleteContact(contactId);
+    dispatch(action);
+  };
+
   return (
     <ul>
       {filterName.map(({ id, name, number }) => {
@@ -12,7 +35,7 @@ function Contacts({ filterName, onClick }) {
             <ContactElement
               name={name}
               number={number}
-              onClick={() => onClick(id)}
+              onClick={() => deleteNumber(id)}
             />
           </li>
         );
@@ -22,14 +45,3 @@ function Contacts({ filterName, onClick }) {
 }
 
 export default Contacts;
-
-Contacts.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  filterName: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
-};

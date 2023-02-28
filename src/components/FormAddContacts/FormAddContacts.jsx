@@ -1,11 +1,15 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactsSlice/contacts-slice';
 
-import PropTypes from 'prop-types';
 import style from './FormAddContacts.module.css';
 
-function FormAddContacts({ addContacts }) {
+function FormAddContacts() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const contacts = useSelector(store => store.contacts);
+  const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -17,6 +21,21 @@ function FormAddContacts({ addContacts }) {
   const reset = () => {
     setName('');
     setNumber('');
+  };
+
+  const findDublicate = name => {
+    const result = contacts.find(
+      contacts => contacts.name.toLowerCase() === name.toLowerCase()
+    );
+    return result;
+  };
+
+  const addContacts = ({ name, number }) => {
+    if (findDublicate(name, number)) {
+      return alert(`${name} is already in contacts`);
+    }
+    const action = addContact({ name, number });
+    dispatch(action);
   };
 
   const handleChangeInput = e => {
@@ -71,6 +90,3 @@ function FormAddContacts({ addContacts }) {
 }
 
 export default FormAddContacts;
-FormAddContacts.propTypes = {
-  addContacts: PropTypes.func.isRequired,
-};
